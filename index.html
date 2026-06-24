@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Portal</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .filters {
+            margin: 20px;
+        }
+
+        input, select {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+        }
+
+        .job-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .job-card {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .job-card h3 {
+            margin: 5px 0;
+        }
+
+        .job-card p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Job Portal</h1>
+
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="Search jobs...">
+
+        <select id="locationFilter">
+            <option value="all">All Locations</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Hyderabad">Hyderabad</option>
+        </select>
+    </div>
+
+    <div id="jobList" class="job-container"></div>
+
+    <script>
+        const jobs = [
+            { title: "Frontend Developer", location: "Chennai", company: "TCS" },
+            { title: "Backend Developer", location: "Bangalore", company: "Infosys" },
+            { title: "Full Stack Developer", location: "Hyderabad", company: "Wipro" },
+            { title: "UI Designer", location: "Chennai", company: "Zoho" },
+            { title: "Software Engineer", location: "Bangalore", company: "Accenture" }
+        ];
+
+        const jobList = document.getElementById("jobList");
+        const searchInput = document.getElementById("searchInput");
+        const locationFilter = document.getElementById("locationFilter");
+
+        function displayJobs(filteredJobs) {
+            jobList.innerHTML = "";
+
+            if (filteredJobs.length === 0) {
+                jobList.innerHTML = "<p>No jobs found</p>";
+                return;
+            }
+
+            filteredJobs.forEach(job => {
+                const jobCard = document.createElement("div");
+                jobCard.classList.add("job-card");
+
+                jobCard.innerHTML = `
+                    <h3>${job.title}</h3>
+                    <p><strong>Company:</strong> ${job.company}</p>
+                    <p><strong>Location:</strong> ${job.location}</p>
+                `;
+
+                jobList.appendChild(jobCard);
+            });
+        }
+
+        function filterJobs() {
+            const searchText = searchInput.value.toLowerCase();
+            const selectedLocation = locationFilter.value;
+
+            const filtered = jobs.filter(job => {
+                const matchTitle = job.title.toLowerCase().includes(searchText);
+                const matchLocation = selectedLocation === "all" || job.location === selectedLocation;
+
+                return matchTitle && matchLocation;
+            });
+
+            displayJobs(filtered);
+        }
+
+        searchInput.addEventListener("input", filterJobs);
+        locationFilter.addEventListener("change", filterJobs);
+
+        displayJobs(jobs);
+    </script>
+
+</body>
+</html>
